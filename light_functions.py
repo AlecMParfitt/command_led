@@ -14,11 +14,10 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
-
 #@author Josh gmys
 def lowerBrightness(strip, current_brightness, prev_command):
-    if current_brightness > 25:
-        LED_BRIGHTNESS = current_brightness - 20
+    if current_brightness > 45:
+        LED_BRIGHTNESS = current_brightness - 40
     else:
         LED_BRIGHTNESS = 5
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
@@ -47,8 +46,11 @@ def increaseBrightNess(strip, current_brightness, prev_command):
 def invertColors(strip):
     
     for i in range(strip.numPixels()):
+        r = strip.getPixelColor(i) >> 16 & 0xFF
+        g = strip.getPixelColor(i) >> 8 & 0xFF
+        b = strip.getPixelColor(i) & 0xFF
         print(strip.getPixelColor(i))
-        strip.setPixelColor(i, Color(255 - strip.getPixelColor(i), 255 - strip.getPixelColor(i), 255 - strip.getPixelColor(i)))
+        strip.setPixelColor(i, Color(255 - r, 255 - g, 255 - b))
     strip.show()
 
 
@@ -73,11 +75,7 @@ skyblue = Color(135,206,235)
 orange = Color(255,127,0)
 grey = Color(128,128,128)
 
-
-
 colorArray = [green,red,blue,purple,white,yellow,skyblue,orange,grey]
-
-
 
 off = Color(0, 0, 0)
 
@@ -98,6 +96,9 @@ def turn_green(strip):
 
 def turn_purple(strip):
     colorWipe(strip, purple)
+
+def turn_red(strip):
+    colorWipe(strip, red)
 
 def light_section(strip, section, color):
     colorWipe(strip, Color(0,0,0))
@@ -123,6 +124,7 @@ def steelers(strip):
             strip.setPixelColor(i, grey)
     strip.show()
 
+#@author Josh gmys
 def party(strip):
     color1 = colorArray[0]
     color2 = colorArray[1]
@@ -262,9 +264,15 @@ def christ1(strip = 0, rem = 1):
             strip.setPixelColor(i, green)
     strip.show()
 
-def turn_red(strip):
-    colorWipe(strip, red)
-
+def christmas(strip):
+    try:
+        while True:
+            christ1(strip, 1)
+            time.sleep(1)
+            christ1(strip, 0)
+            time.sleep(1)
+    except KeyboardInterrupt:
+        colorWipe(strip, Color(0,0,0))
 
 
 if __name__ == '__main__':
